@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
 	var conferenceName = "Go Conference"
@@ -11,37 +14,64 @@ func main() {
 	fmt.Println("We have total tickets ", conferenceTicket, "and remaining tickets are ", remainingTicket)
 	fmt.Println("Get your booking done in few clicks")
 
-	var firstName string
-	var lastName string
-	var email string
-	var userTicket uint
+	for {
+		var firstName string
+		var lastName string
+		var email string
+		var userTicket uint
 
-	//Slice
-	bookings := []string{} //Another way to declare slice
+		//Slice
+		bookings := []string{} //Another way to declare slice
 
-	//Ask user to enter the name
-	//Get input from user: First Name
-	fmt.Println("Enter first name: ")
-	fmt.Scan(&firstName)
+		//Ask user to enter the name
+		//Get input from user: First Name
+		fmt.Println("Enter first name: ")
+		fmt.Scan(&firstName)
 
-	//Last Name
-	fmt.Println("Enter last name: ")
-	fmt.Scan(&lastName)
+		//Last Name
+		fmt.Println("Enter last name: ")
+		fmt.Scan(&lastName)
 
-	//Email address
-	fmt.Println("Enter email address: ")
-	fmt.Scan(&email)
+		//Email address
+		fmt.Println("Enter email address: ")
+		fmt.Scan(&email)
 
-	//Number of tickets to book
-	fmt.Println("Enter number of tickets you want to book: ")
-	fmt.Scan(&userTicket)
+		//Number of tickets to book
+		fmt.Println("Enter number of tickets you want to book: ")
+		fmt.Scan(&userTicket)
 
-	remainingTicket = remainingTicket - userTicket
-	bookings = append(bookings, firstName+" "+lastName)
+		if userTicket <= remainingTicket {
+			remainingTicket = remainingTicket - userTicket
+			bookings = append(bookings, firstName+" "+lastName)
 
-	fmt.Printf("Thank you '%v %v' for booking %v tickets. You will get confirmation email at %v \n", firstName, lastName, userTicket, email)
+			fmt.Printf("Thank you '%v %v' for booking %v tickets. You will get confirmation email at %v \n", firstName, lastName, userTicket, email)
+			fmt.Println("Remaining tickets are : ", remainingTicket)
 
-	fmt.Println("Remaining tickets are : ", remainingTicket)
+			firstNames := []string{}
 
-	fmt.Printf("There are all our bookings : %v\n", bookings)
+			/*
+				for index := range bookings {
+					fmt.Println(bookings[index])
+					var names = strings.Split(bookings[index], " ")[0]
+					firstNames = append(firstNames, names)
+				}
+			*/
+			for _, booking := range bookings {
+				var names = strings.Fields(booking)
+				firstNames = append(firstNames, names[0])
+			}
+
+			fmt.Printf("There are all first name of bookings : %v\n", firstNames)
+
+			if remainingTicket == 0 {
+				fmt.Println("All tickets are booked. Thank you for booking")
+				break
+			}
+		} else {
+			fmt.Printf("We have only %v tickets remaining so you can not book %v tickets", remainingTicket, userTicket)
+			//break
+			//continue
+		}
+
+	}
 }
