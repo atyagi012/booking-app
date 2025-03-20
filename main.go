@@ -1,9 +1,8 @@
 package main
 
 import (
-	"booking-app/helper"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
 var conferenceName = "Go Conference"
@@ -13,7 +12,7 @@ const conferenceTicket = 50
 var remainingTicket uint = 50
 
 // Slice
-var bookings = []string{} //Another way to declare slice
+var bookings = make([]map[string]string, 0) //Another way to declare slice
 
 func main() {
 	greetUser()
@@ -23,7 +22,7 @@ func main() {
 		firstName, lastName, email, userTicket := getUserInput()
 
 		//Validate user input
-		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTicket, remainingTicket)
+		isValidName, isValidEmail, isValidTicketNumber := ValidateUserInput(firstName, lastName, email, userTicket, remainingTicket)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 			//Book ticket
@@ -82,8 +81,8 @@ func greetUser() {
 func getFirstName() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
-		var names = strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
+		//var names = strings.Fields(booking)
+		firstNames = append(firstNames, booking["firstName"])
 	}
 	return firstNames
 }
@@ -131,7 +130,17 @@ func getUserInput() (string, string, string, uint) {
 
 func bookTicket(userTicket uint, firstName string, lastName string, email string) {
 	remainingTicket = remainingTicket - userTicket
-	bookings = append(bookings, firstName+" "+lastName)
+
+	//Map
+	var userData = make(map[string]string)
+
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	userData["userTicket"] = strconv.FormatUint(uint64(userTicket), 10) //formatting uint to string, 10 represents BASE10 number
+
+	bookings = append(bookings, userData)
+	fmt.Printf("List of booking is : %v\n", bookings)
 
 	fmt.Printf("Thank you '%v %v' for booking %v tickets. You will get confirmation email at %v \n", firstName, lastName, userTicket, email)
 	fmt.Printf("%v tickets remaining for %v\n", remainingTicket, conferenceName)
