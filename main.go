@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"sync"
+	"time"
 )
 
 var conferenceName = "Go Conference"
@@ -20,8 +22,9 @@ type UserData struct {
 	lastName   string
 	email      string
 	userTicket uint
-	//isUserOptedIn bool
 }
+
+var waitGroup = sync.WaitGroup{}
 
 func main() {
 	greetUser()
@@ -34,8 +37,10 @@ func main() {
 		isValidName, isValidEmail, isValidTicketNumber := ValidateUserInput(firstName, lastName, email, userTicket, remainingTicket)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
-			//Book ticket
-			bookTicket(userTicket, firstName, lastName, email)
+			bookTicket(userTicket, firstName, lastName, email) //Book ticket
+
+			waitGroup.Add(1)                                      //Sets the number of goroutines to wait for
+			go sendTicket(userTicket, firstName, lastName, email) //Send ticket
 
 			//Get first name of user
 			firstNames := getFirstName()
@@ -76,6 +81,8 @@ func main() {
 
 	tickets := getRemainingTickets(remainingTicket)
 	fmt.Println("Remaining tickets are : ", tickets)
+
+	waitGroup.Wait() //Wait for all goroutines to finish //Blocks until the WaitGroup counter is zero
 }
 
 // Functions
@@ -162,4 +169,18 @@ func bookTicket(userTicket uint, firstName string, lastName string, email string
 
 	fmt.Printf("Thank you '%v %v' for booking %v tickets. You will get confirmation email at %v \n", firstName, lastName, userTicket, email)
 	fmt.Printf("%v tickets remaining for %v\n", remainingTicket, conferenceName)
+}
+
+func sendTicket(userTickets uint, firstName string, lastName string, email string) {
+	//Send ticket code here
+	fmt.Println("############################")
+	fmt.Println("Sending ticket to email address ", email)
+	//Sleep for 10 seconds
+	time.Sleep(10 * time.Second)
+	var tickets = fmt.Sprintf("TICKET SENT:%v tickets for %v %v", userTickets, firstName, lastName)
+
+	fmt.Printf(":\n%v \nto email address %v\n", tickets, email)
+	fmt.Println("############################")
+
+	waitGroup.Done() //Decrements the WaitGroup counter by one
 }
