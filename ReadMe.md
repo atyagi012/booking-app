@@ -15,6 +15,18 @@ This project is a booking application written in Go. It allows users to book eve
 - ** VSCode
 - ** GO plugin in VSCode
 
+#Explore
+-** Variable and constants
+-** Formatted output
+-** Data Types
+-** Pointers
+-** Array and Slice
+-** Loops, if else, switch case
+-** Functions
+-** Maps
+-** Structs
+-** GoRutines - Concurrency
+
 #Concurrency in GO
 - **GO use "Green thread"
 - ** Abstraction of an actual thread
@@ -28,3 +40,4 @@ This project is a booking application written in Go. It allows users to book eve
 - ** Open project in VS Code
 - ** Open terminal in VS Code
 - ** Run command "go run ."
+
