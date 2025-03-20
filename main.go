@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 )
 
 var conferenceName = "Go Conference"
@@ -12,7 +11,17 @@ const conferenceTicket = 50
 var remainingTicket uint = 50
 
 // Slice
-var bookings = make([]map[string]string, 0) //Another way to declare slice
+// var bookings = make([]map[string]string, 0)
+var bookings = make([]UserData, 0)
+
+// Struct
+type UserData struct {
+	firstName  string
+	lastName   string
+	email      string
+	userTicket uint
+	//isUserOptedIn bool
+}
 
 func main() {
 	greetUser()
@@ -82,7 +91,7 @@ func getFirstName() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
 		//var names = strings.Fields(booking)
-		firstNames = append(firstNames, booking["firstName"])
+		firstNames = append(firstNames, booking.firstName)
 	}
 	return firstNames
 }
@@ -132,12 +141,21 @@ func bookTicket(userTicket uint, firstName string, lastName string, email string
 	remainingTicket = remainingTicket - userTicket
 
 	//Map
-	var userData = make(map[string]string)
+	//var userData = make(map[string]string)
 
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	userData["userTicket"] = strconv.FormatUint(uint64(userTicket), 10) //formatting uint to string, 10 represents BASE10 number
+	//**No conversion neeed now as we are using struct
+	// userData["firstName"] = firstName
+	// userData["lastName"] = lastName
+	// userData["email"] = email
+	// userData["userTicket"] = strconv.FormatUint(uint64(userTicket), 10) //formatting uint to string, 10 represents BASE10 number
+
+	//Struct
+	var userData = UserData{
+		firstName:  firstName,
+		lastName:   lastName,
+		email:      email,
+		userTicket: userTicket,
+	}
 
 	bookings = append(bookings, userData)
 	fmt.Printf("List of booking is : %v\n", bookings)
